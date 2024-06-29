@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citação Inspiradora</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, width 0.2s, height 0.2s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>"O design não é apenas o que parece e o que se sente. O design é como funciona."</h1>
+        <p>- Steve Jobs</p>
+    </div>
+    <script>
+        const body = document.body;
+        const colors = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 0, 255, 0.6)', 'rgba(255, 255, 0, 0.6)', 'rgba(255, 0, 255, 0.6)', 'rgba(0, 255, 255, 0.6)'];
+        const bubbles = [];
+
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble', 'floating');
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.top = Math.random() * 100 + 'vh';
+            bubble.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            body.appendChild(bubble);
+
+            bubble.originalSize = size;
+            bubble.addEventListener('mouseenter', function() {
+                bubble.style.width = parseInt(bubble.style.width) / 2 + 'px';
+                bubble.style.height = parseInt(bubble.style.height) / 2 + 'px';
+            });
+
+            bubble.addEventListener('mouseleave', function() {
+                bubble.style.width = bubble.originalSize;
+                bubble.style.height = bubble.originalSize;
+            });
+
+            bubbles.push(bubble);
+        }
+
+        for (let i = 0; i < 50; i++) {
+            createBubble();
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            bubbles.forEach(bubble => {
+                const rect = bubble.getBoundingClientRect();
+                const dx = e.clientX - rect.left - rect.width / 2;
+                const dy = e.clientY - rect.top - rect.height / 2;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const maxDistance = 200;
+                const scale = 1 + (1 - Math.min(distance / maxDistance, 1)) * 0.5;
+                bubble.style.transform = `translate(${dx * 0.1}px, ${dy * 0.1}px) scale(${scale})`;
+                bubble.style.boxShadow = `0 0 ${10 * scale}px rgba(255, 255, 255, ${0.5 * scale})`;
+            });
+        });
+
+        // Simulação de um erro "acidental" que não afeta o funcionamento principal
+        const unknownVariable = someFunction();
+
+    </script>
+</body>
+</html>
